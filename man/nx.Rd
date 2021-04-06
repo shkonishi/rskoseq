@@ -2,22 +2,24 @@
 % Please edit documentation in R/nx.R
 \name{nx}
 \alias{nx}
-\title{Calcuration of N50 and L50 from genome sequence.}
+\title{Calcuration of NX and LX from genome sequence.}
 \usage{
-nx(in_f, N, genome)
+nx(in_f, genome)
 }
 \arguments{
 \item{in_f}{The input file path with fasta format, or DNAStringSet object from Biostrings package.}
 
-\item{N}{numeric vector: If calcuration for N90(L90), N50(L50), and N10(L10), N = c(90, 50, 10)}
-
 \item{genome}{numeric: genome size. The default is NULL. The genome size is calculated from the sum of the widths of the input fasta files.}
 }
 \description{
-Calculation of N50 and L50 from genomic sequence in fasta format.
+Calculation of NX and LX from genomic sequence in fasta format.
 If the genomic sequence is pseudo chromosomes, L50 is no needed.
 }
 \examples{
-# fas <- "~/db/genome/CHOK1GS_HDv1/CHOK1GS_HDv1.dna.toplevel.fa.gz"
-# rskoseq::nx(in_f = fas, N = 50)
+\dontrun{
+fas <- "~/db/genome/CHOK1GS_HDv1/CHOK1GS_HDv1.dna.toplevel.fa.gz"
+nxdat <- rskoseq::nx(in_f = fas)
+plot(x = nxdat$NGX, y = nxdat$Mbp, xlab = "NX", ylab = "contig length(Mbp)")
+abline(v = 50, lty = 3)
+}
 }

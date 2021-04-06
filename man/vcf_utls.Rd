@@ -12,6 +12,12 @@ vcf_flt(x, snv, qual)
 
 vcf_info(x)
 
+vcf_gt(x, labs)
+
+vcf_anno(x, cds)
+
+vcf_info(x)
+
 vcf_gt(x, labs = NULL)
 
 vcf_anno(x, cds)
@@ -55,6 +61,5 @@ names(longorf) <- sapply(strsplit(names(longorf), " "), "[", 1)
 res <- vcf_anno(snp, longorf)
 
 }
-
 
 }

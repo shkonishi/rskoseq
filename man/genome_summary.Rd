@@ -20,6 +20,16 @@ Summary of genomic sequences from fasta file
 \examples{
 \dontrun{
 fas <- "~/db/genome/CHOK1GS_HDv1/CHOK1GS_HDv1.dna.toplevel.fa.gz"
-genome_summary(in_f = fas, N = c(90,50,10))
+res <- genome_summary(in_f = fas, N = c(90,50,10))
+
+# summary of genomic sequences
+res$summary
+
+# base frequency
+res$base_freq
+
+# disribution of contig lengs
+hist(log10(res$dist_cntg))
+
 }
 }

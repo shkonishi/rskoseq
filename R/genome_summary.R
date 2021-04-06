@@ -8,7 +8,17 @@
 #' @examples
 #' \dontrun{
 #' fas <- "~/db/genome/CHOK1GS_HDv1/CHOK1GS_HDv1.dna.toplevel.fa.gz"
-#' genome_summary(in_f = fas, N = c(90,50,10))
+#' res <- genome_summary(in_f = fas, N = c(90,50,10))
+#'
+#' # summary of genomic sequences
+#' res$summary
+#'
+#' # base frequency
+#' res$base_freq
+#'
+#' # disribution of contig lengs
+#' hist(log10(res$dist_cntg))
+#'
 #' }
 #' @export
 genome_summary <- function(in_f, N, genome=NULL){
@@ -26,35 +36,34 @@ genome_summary <- function(in_f, N, genome=NULL){
     genome <- sum(as.numeric(Biostrings::width(seq)))
   }
 
-  # scaffold ----
-  scaffold <-  length(seq)
+  # contig or scaffold ----
+  ncontig <-  length(seq)
 
   # total bases ---
-  bp <- sum(as.numeric(Biostrings::width(seq)))
+  wseq <- Biostrings::width(seq)
+  bp <- sum(as.numeric(wseq))
+  max_cntg <- max(wseq)
+  min_cntg <- min(wseq)
 
 
-  if (length(N) == 1) {
-    res <- rskoseq::nx(in_f = seq, N = N, genome)
-    NLX <- stats::setNames(paste(res, collapse = ";"),
-                    paste(paste0("N",N), paste0("L", N), sep = ";"))
+  res <- rskoseq::nx(in_f = seq, genome)
+  nxbp <- res$bp[res$NGX %in% N]
+  lxn <- res$LGX[res$NGX %in% N]
 
-  } else{
-    l_nx <- sapply(N, function(x){
-      paste(nx(in_f = seq, N = x), collapse = ";")
-    })
-    NLX <- stats::setNames(l_nx, paste(paste0("N",N), paste0("L", N), sep = ";"))
-  }
 
   # GC content(%), N content (%) ----
   frq_base <- apply(Biostrings::alphabetFrequency(seq), 2, sum)
-  at <-sum(as.numeric(frq_base[names(frq_base) %in% c("A","T")]))
-  gc <-sum(as.numeric(frq_base[names(frq_base) %in% c("C","G")]))
-  gc_rate <- gc/(at+gc)
-  n_rate <- frq_base[which(names(frq_base) =="N")]/bp
+  at <- sum(as.numeric(frq_base[names(frq_base) %in% c("A","T")]))
+  gc <- sum(as.numeric(frq_base[names(frq_base) %in% c("C","G")]))
+  gc_rate <- gc/(at + gc)
+  n_rate <- frq_base[which(names(frq_base) == "N")]/bp
 
-  dat <- data.frame(bp=bp, scaffold=scaffold,
-                    t(NLX),
-                    N=n_rate, GC=gc_rate,
-                    row.names = NULL, check.names = F)
-  return(dat)
+  value <- as.character(c(bp, ncontig, max_cntg, min_cntg, nxbp, lxn,
+                      round(n_rate, digits = 3), round(gc_rate, digits = 3)))
+  tag <- c("Total sequence length(bp)", "Number of contigs", "Longest contig(bp)", "Shortest contig(bp)",
+           paste0("N", N), paste0("L", N), "N", "GC")
+
+  gsum <- data.frame(tag, value)
+
+  return(list(summary = gsum, base_freq = frq_base, dist_cntg = wseq))
 }

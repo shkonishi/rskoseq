@@ -41,7 +41,10 @@ alnd <- "~/pub/sampledata/rnaseq/project1/test2.h2"
 fqd <- "~/pub/sampledata/rnaseq/project1/paired_fastq"
 unlink(alnd, recursive = T)
 rskoseq::project_rnsq("~/pub/sampledata/rnaseq/project1", "test2.h2", "hisat2")
-rskoseq::rep_hisat2(alndir = alnd, idx = idx, fqdir = fqd, suffix_fq = "_sub.fastq.gz", paired = T)
+
+adopt <- "--rna-strandness RF --no-softclip --dta"
+rskoseq::rep_hisat2(alndir = alnd, idx = idx, fqdir = fqd, suffix_fq = "_sub.fastq.gz",
+paired = T, ... = adopt)
 
 # project FALSE (all result create under the alignment directory)
 alnd <- "~/pub/sampledata/rnaseq/project1"

@@ -24,10 +24,12 @@ maprate <- function(fp, lab = NA, pair = F, algnr = "bowtie2"){
   lines <- readLines(fp)
   nsample <- length(grep("overall alignment rate", lines))
 
-  if(!length(lab) == nsample){
+  if (!length(lab) == nsample) {
     stop("number of samples and label's length are different")
   } else if (all(is.na(lab))) {
     lab <- seq(nsample)
+  } else {
+    lab <- lab[order(nchar(lab), lab)]
   }
 
   # read log file ----

@@ -61,7 +61,7 @@ rblast <- function(in_f, out_f, program, db,  ...){
       bout <- lapply(res, function(x){unlist(strsplit(x, "\t"))}) %>%
       {data.frame(do.call(what = rbind, args = .), row.names = NULL, stringsAsFactors = F)} %>%
         transform(., dbname = rep(dbname[i], nrow(.))) %>% # add database name
-        dplyr::mutate_at(., c(3, 4, 7, 8, 9, 10, 13, 14), list(~as.numeric)) # convert numeric
+        dplyr::mutate_at(., .vars = c(3, 4, 7, 8, 9, 10, 13, 14), .funs = as.numeric)  # convert numeric
 
     } else {
       bout <- readr::read_delim(out_f[i], delim = "\t", col_names = F, col_types = c("ccnnnnnnnnnnnncc"))

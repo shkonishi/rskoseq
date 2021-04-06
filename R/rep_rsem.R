@@ -50,21 +50,21 @@ rep_rsem <- function(alndir,
   # # fastq files or directory exist or not ----
   fqdir <- normalizePath(fqdir)
   path_fq <- list.files(fqdir, suffix_fq, full.names = TRUE)
-  if (identical(path_fq, character(0))){
+  if (identical(path_fq, character(0))) {
     stop(paste("There is not fastq files in", fqdir, ", or the suffix of fastq is different from", suffix_fq, "."))
   }
 
   # # Collect path of fastq file ----
-  if (paired == T){
+  if (paired == T) {
     r1fqs <- grep("R1", path_fq, value = T)
     r2fqs <- grep("R2", path_fq, value = T)
 
   } else {
-    r1fqs <- path_fq
+    r1fqs <- grep("R1", path_fq, value = T)
   }
 
   # # prefix of fastq files ----
-  if (length(r1fqs) != length(prefix_fq)){
+  if (length(r1fqs) != length(prefix_fq)) {
     stop("The length of 'prefix_fq' must be the same as the number of fastq files in 'fqdir'.")
   }
 
@@ -78,13 +78,13 @@ rep_rsem <- function(alndir,
   path_maplog <- paste0(alndir, "/", prefix_fq, "_map_log.txt") # default
 
   # # index file exists or not ----
-  if (!file.exists(paste0(idx_name, ".1.bt2"))){
+  if (!file.exists(paste0(idx_name, ".1.bt2"))) {
     stop("Can't find index file.")
   }
 
   # # rsem-calculate-expression path ----
   rsem <- suppressWarnings(system("which rsem-calculate-expression", intern = T))
-  if (!length(rsem)){
+  if (!length(rsem)) {
     stop("Ther is no rsem-calculate-expression, or PATH environmental variable")
   }
 
@@ -99,7 +99,7 @@ rep_rsem <- function(alndir,
   # # command log file ----
   datestrings <- gsub(":", ".", gsub(" ", "_", date()))
   path_comlog <- list.files(alndir, "log.txt", full.names = T)
-  if (identical(path_comlog, character(0))){
+  if (identical(path_comlog, character(0))) {
     path_comlog <- paste0(alndir, "/", prjn, "_", alnd, "_", datestrings, "_log.txt")
     file.create(path_comlog)
   }
@@ -108,9 +108,9 @@ rep_rsem <- function(alndir,
   cores <- parallel::detectCores()
 
   # # rsem-calcurate-expression additional options ----
-  if (!missing(...)){
+  if (!missing(...)) {
     add_op <- paste0(" ", ..., " ")
-  }else{
+  } else {
     add_op <- ""
   }
 
@@ -120,8 +120,8 @@ rep_rsem <- function(alndir,
   writeLines("# rsem", con)
 
   # # execute command ----
-  if (paired == F){
-    for (i in seq_along(r1fqs)){
+  if (paired == F) {
+    for (i in seq_along(r1fqs)) {
       com <- paste(rsem, "--bowtie2 --sort-bam-by-coordinate -p",
                    cores,
                    add_op,
@@ -132,7 +132,7 @@ rep_rsem <- function(alndir,
       writeLines(com, con)
     }
   } else {
-    for (i in seq_along(r1fqs)){
+    for (i in seq_along(r1fqs)) {
       com <- paste(rsem, "--bowtie2 --sort-bam-by-coordinate -p",
                    cores,
                    add_op,
@@ -218,16 +218,16 @@ rep_rsem <- function(alndir,
   if (all(fc1)) print("all results files removed to 'resdir'. ")
 
   # all stat directories removed to ./stats ----
-  if(!file.exists("./stats")) dir.create("./stats")
+  if (!file.exists("./stats")) dir.create("./stats")
   fc2 <- sapply(list.files(alndir, ".stat"), function(x) file.rename(x, paste(alndir, "stats", x, sep = "/")))
   if (all(fc2)) print("all stat directory removed to 'stats'. ")
 
   # sorted bam files removed to ./sortedbam ----
-  if(!file.exists("./sortbam")) dir.create("./sortbam")
+  if (!file.exists("./sortbam")) dir.create("./sortbam")
   fc3 <- sapply(list.files(alndir, ".sorted.bam"), function(x)file.rename(x, paste(alndir, "sortbam", x, sep = "/")))
-  if (all(fc3)){
+  if (all(fc3)) {
     fr3 <- file.remove(list.files(alndir, "\\.bam"))
-    if (all(fr3)){
+    if (all(fr3)) {
       print("all sorted bam files removed to 'sortbam' directory, and other bam files were deleted. ")
     } else {
       print("Could not all sorted bam files removed")

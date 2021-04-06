@@ -3,13 +3,11 @@
 #' The utility for handling VCF
 #'
 #' @name vcf_utls
-#' @rdname vcf_utls
 #'
 #' @usage vcf_flt(x, snv, qual)
 #' @usage vcf_info(x)
 #' @usage vcf_gt(x, labs)
 #' @usage vcf_anno(x, cds)
-#'
 #'
 #' @param x data.frame: VCF format
 #' @param snv character: "snp", or "indel" [default: snp]
@@ -42,9 +40,9 @@
 #'
 #' }
 #'
-#'
+
+
 #' @rdname vcf_utls
-#' @export
 vcf_flt <- function(x, snv = "snp", qual = 0){
 
   QUAL <- NULL; FILTER <- NULL; INFO <- NULL
@@ -64,7 +62,6 @@ vcf_flt <- function(x, snv = "snp", qual = 0){
 }
 
 #' @rdname vcf_utls
-#' @export
 vcf_info <- function(x){
 
   if (length(grep("^INDEL", x$INFO)) != 0) {
@@ -140,7 +137,6 @@ vcf_info <- function(x){
 }
 
 #' @rdname vcf_utls
-#' @export
 vcf_gt <- function(x, labs = NULL){
   gtpl <- x[10:ncol(x)] # extract columns of GT & PL
   nsmp <- length(10:ncol(x)) # number of samples
@@ -207,7 +203,6 @@ vcf_gt <- function(x, labs = NULL){
 }
 
 #' @rdname vcf_utls
-#' @export
 vcf_anno <- function(x, cds){
   POS <- NULL; REF <- NULL; ALT <- NULL
   # extract and translate CDS corresponding to 'CHOROM' from VCF
