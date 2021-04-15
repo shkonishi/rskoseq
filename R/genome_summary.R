@@ -21,7 +21,7 @@
 #'
 #' }
 #' @export
-genome_summary <- function(in_f, N, genome=NULL){
+genome_summary <- function(in_f, N, genome = NULL){
   # read fasta file ----
   if (class(in_f) == "DNAStringSet") {
     seq <- in_f
@@ -36,10 +36,10 @@ genome_summary <- function(in_f, N, genome=NULL){
     genome <- sum(as.numeric(Biostrings::width(seq)))
   }
 
-  # contig or scaffold ----
+  # the number of contigs or scaffolds ----
   ncontig <-  length(seq)
 
-  # total bases ---
+  # total bases ----
   wseq <- Biostrings::width(seq)
   bp <- sum(as.numeric(wseq))
   max_cntg <- max(wseq)

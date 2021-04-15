@@ -4,12 +4,14 @@
 \alias{nx}
 \title{Calcuration of NX and LX from genome sequence.}
 \usage{
-nx(in_f, genome)
+nx(in_f, genome, asmbl)
 }
 \arguments{
 \item{in_f}{The input file path with fasta format, or DNAStringSet object from Biostrings package.}
 
 \item{genome}{numeric: genome size. The default is NULL. The genome size is calculated from the sum of the widths of the input fasta files.}
+
+\item{asmbl}{character: assembly name. The N50 is compared to the previous assembly.}
 }
 \description{
 Calculation of NX and LX from genomic sequence in fasta format.
@@ -18,7 +20,7 @@ If the genomic sequence is pseudo chromosomes, L50 is no needed.
 \examples{
 \dontrun{
 fas <- "~/db/genome/CHOK1GS_HDv1/CHOK1GS_HDv1.dna.toplevel.fa.gz"
-nxdat <- rskoseq::nx(in_f = fas)
+nxdat <- rskoseq::nx(in_f = fas, asmbl = "CHOK1GS_HDv1")
 plot(x = nxdat$NGX, y = nxdat$Mbp, xlab = "NX", ylab = "contig length(Mbp)")
 abline(v = 50, lty = 3)
 }

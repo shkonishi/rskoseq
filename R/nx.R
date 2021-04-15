@@ -1,17 +1,18 @@
 #' Calcuration of NX and LX from genome sequence.
 #' @description Calculation of NX and LX from genomic sequence in fasta format.
 #' If the genomic sequence is pseudo chromosomes, L50 is no needed.
-#' @usage nx(in_f, genome)
+#' @usage nx(in_f, genome, asmbl)
 #' @param in_f The input file path with fasta format, or DNAStringSet object from Biostrings package.
 #' @param genome numeric: genome size. The default is NULL. The genome size is calculated from the sum of the widths of the input fasta files.
+#' @param asmbl character: assembly name. The N50 is compared to the previous assembly.
 #' @examples \dontrun{
 #' fas <- "~/db/genome/CHOK1GS_HDv1/CHOK1GS_HDv1.dna.toplevel.fa.gz"
-#' nxdat <- rskoseq::nx(in_f = fas)
+#' nxdat <- rskoseq::nx(in_f = fas, asmbl = "CHOK1GS_HDv1")
 #' plot(x = nxdat$NGX, y = nxdat$Mbp, xlab = "NX", ylab = "contig length(Mbp)")
 #' abline(v = 50, lty = 3)
 #' }
 #' @export
-nx <- function(in_f, genome = NULL){
+nx <- function(in_f, genome = NULL, asmbl = NA){
 
   # read fasta file ----
   if (class(in_f) == "DNAStringSet") {
@@ -38,7 +39,7 @@ nx <- function(in_f, genome = NULL){
 
   # Scaffold length when cumulative sum reaches N (%) of whole base sequence ----
   sfl <- sortlen[sfn];
-  ngdat <- data.frame(NGX = 1:99, LGX = sfn, bp = sfl, Mbp = sfl/10^6)
+  ngdat <- data.frame(NGX = 1:99, LGX = sfn, bp = sfl, Mbp = sfl/10^6, assembly = asmbl)
 
   # return ----
   return(ngdat)
